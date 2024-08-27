@@ -2,14 +2,15 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import seaborn as sns
 
-def plt_sleep(daily_sleep):
+def plt_sleep(daily_sleep, colors):
 	sns.set(font_scale = 1)
 	sns.set_style(style='white')
 
 	plt.figure(figsize=(10, 6))
 
 	#sns.lineplot(data=daily_sleep, legend=False, palette=["#E69F00"])
-	sns.scatterplot(data=daily_sleep, legend=False, palette=["#56B4E9"])
+	sns.scatterplot(x=daily_sleep.index, y=daily_sleep.value, legend=False, color=colors[0])
+	sns.lineplot(x=daily_sleep.index, y=daily_sleep.rolling_average, legend=False)
 
 	plt.ylabel(None)
 	plt.xlabel(None)
@@ -30,13 +31,13 @@ def convert_time(time_obj):
     hours_from_21 = time_obj.hour + time_obj.minute / 60 - 21
     return hours_from_21 if hours_from_21 >= 0 else hours_from_21 + 24
 
-def plot_bedtime(df):
+def plot_bedtime(df, title):
 	plt.figure(figsize=(10, 6))
-	sns.scatterplot(x=df.index, y=df["sleep_start_hours"], label="Sleep Start",color=["#E69F00"])
-	sns.scatterplot(x=df.index, y=df["sleep_end_hours"], label="Sleep End", color=["#56B4E9"])
+	sns.scatterplot(x=df.index, y=df["sleep_start_hours"], label="Sleep Start",color=["#E69F00"], style=df["day_type"])
+	sns.scatterplot(x=df.index, y=df["sleep_end_hours"], label="Sleep End", color=["#56B4E9"],style=df["day_type"])
 
 	# Formatting
-	plt.title("Sleep Start and End Time in the last 19 months")
+	plt.title(f"{title}")
 	plt.ylabel("Time of Day")
 	plt.xlabel("Date")
 	ax = plt.gca()
@@ -48,3 +49,10 @@ def plot_bedtime(df):
 	plt.tight_layout()
 	plt.legend()
 	plt.show()
+
+# Annotate weekdays
+def is_weekend(day):
+    if day in ['Saturday', 'Sunday']:
+        return 'Weekend'
+    else:
+        return 'Weekday'
