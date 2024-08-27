@@ -9,13 +9,14 @@ def plt_sleep(daily_sleep, colors):
 	plt.figure(figsize=(10, 6))
 
 	#sns.lineplot(data=daily_sleep, legend=False, palette=["#E69F00"])
-	sns.scatterplot(x=daily_sleep.index, y=daily_sleep.value, legend=False, color=colors[0])
-	sns.lineplot(x=daily_sleep.index, y=daily_sleep.rolling_average, legend=False)
+	sns.scatterplot(x=daily_sleep.index, y=daily_sleep.value, legend=False, color=colors[0], label="Daily Sleep Quality")
+	sns.lineplot(x=daily_sleep.index, y=daily_sleep.rolling_average, legend=False, label='28-day Average (Roll)')
 
 	plt.ylabel(None)
 	plt.xlabel(None)
+	plt.legend()
 	plt.tick_params(bottom=True, left=True)
-	plt.title("Daily Sleep Quality over the last 19 months")
+	plt.title("Daily Sleep Quality over the last 21 months")
 	sns.despine(offset=10, trim=True)
 
 	ax = plt.gca()
